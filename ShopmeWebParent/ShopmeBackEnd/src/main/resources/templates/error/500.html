@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{fragments :: page_head('500 - SHopmeAdmin', 'none')}">
+</head>
+<body>
+	<div class="container-fluid">
+		<div th:replace="~{navigation :: menu}"></div>
+		
+		<div class="m-3">
+			<h2> Sorry, the sever has been encounted an error while processing your request</h2>
+		</div>
+		
+		<div th:replace="~{fragments :: footer}"></div>
+	</div>
+</body>
+</html>
