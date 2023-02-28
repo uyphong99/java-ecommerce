@@ -55,11 +55,6 @@
 							<div th:replace="~{fragments :: status(${product.enabled}, 'product', '/products', ${product.id})}" />
 						</td>
 						<td>
-							<a class="fas fa-file-alt fa-2x icon-green"
-								th:href="@{'/products/detail/' + ${product.id}}"
-								title="view detail product">
-							</a>
-							&nbsp; 
 							<a class="fa-solid fa-pen-to-square icon-green fa-2x" 
 								th:href="@{'/products/edit/' + ${product.id}}" title="Update this product">
 							</a> 

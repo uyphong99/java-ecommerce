@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -35,8 +36,16 @@ public class ProductController {
 	private CategoryService categoryService;
 	
 	@GetMapping("/products")
-	public String findAll(Model model) {
-		List<Product> listProducts = service.listAll();
+	public String findAll(Model model,
+			@Param("keyword") String keyword) {
+		List<Product> listProducts;
+		
+		if (keyword == null) {
+			listProducts = service.listAll();
+		} else {
+			listProducts = service.findByKeyword(keyword);
+		}
+		
 		
 		model.addAttribute("listProducts", listProducts);
 		
@@ -56,6 +65,9 @@ public class ProductController {
 		model.addAttribute("listBrands", listBrands);
 		model.addAttribute("pageTitle", "Create New Product");
 		
+		Integer numberOfExistingExtraImagesInteger = product.getImages().size();
+		model.addAttribute("numberOfExistingExtraImagesInteger", numberOfExistingExtraImagesInteger);
+
 		return "products/product_form";
 	}
 	
