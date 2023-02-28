@@ -19,6 +19,7 @@
 			onsubmit="return checkProductUnique(this)"
 			th:object="${product}">
 			<input type="hidden" th:field="*{id}" />
+			<input th:if="${product.category != null}" type="hidden" id="categoryId" th:value="${product.category.id}" />
 			<ul class="nav nav-tabs" id="myTab" role="tablist">
   				<li class="nav-item">
     				<a class="nav-link active"  data-toggle="tab" href="#overview" role="tab">Overview</a>
@@ -46,7 +47,13 @@
   				<div class="tab-pane" id="images" role="tabpanel" >
 					<div th:replace="~{products/product_images :: content}"></div>
 				</div>
-  				<div class="tab-pane" id="details" role="tabpanel" >Details</div>
+  				<div class="tab-pane p-3" id="details" role="tabpanel" >
+					<div th:replace="~{products/product_details :: content}"></div>
+					<div>
+						<input type="button" class="btn btn-secondary" value="Add More Detail" 
+							onclick="addNextDetailSection()"/>
+					</div>
+				</div>
   				<div class="tab-pane p-3" id="shipping" role="tabpanel" >
 					<div th:replace="~{products/product_shipping :: content}"></div>
 				</div>
@@ -83,6 +90,7 @@
 <script type="text/javascript">
 	moduleURL = "[[@{/products}]]";
 	brandModuleURL = "[[@{/brands}]]";
+	var extraImagesCount = 0;
 	dropdownBrands = $("#brand");
 	dropdownCategories = $("#category");
 	
@@ -98,46 +106,81 @@
 			getCategories();
 		});	
 		
-		getCategories();
+		getCategoriesForNewForm();
 		
-		$("#extraImage1").change(function() {
-			if (!checkFileSize(this)) {
-				return;
-			}
-			
-			showExtraImageThumbnail(this);
+		$("input[name='extraImage']").each(function(index) {
+			extraImagesCount++;
+			$(this).change(function() {
+				showExtraImageThumbnail(this, index);
+			});
 		});
 		
+		$("a[name='linkRemoveExtraImage']").each(function(index) {
+			$(this).click(function() {
+				removeExtraImage(index);
+			});
+		});
 	});
 	
-	function showExtraImageThumbnail(fileInput) {
+	function getCategoriesForNewForm() {
+		catIdField = $("#categoryId");
+		
+		editMode = false;
+		
+		if (catIdField.length) {
+			editMode = true;
+		}
+		
+		if (!editMode) getCategories();
+	}
+	
+	function showExtraImageThumbnail(fileInput, index) {
 		var file = fileInput.files[0];
 		var reader = new FileReader();
 		reader.onload = function(e) {
-			$("#extraThumbnail1").attr("src", e.target.result);
+			$("#extraThumbnail" + index).attr("src", e.target.result);
 		};
 		
 		reader.readAsDataURL(file);
 		
-		addExtraImageSection();
+		if (index >= extraImagesCount - 1) {
+			addNextExtraImageSection(index + 1);
+		}
+		
 	}
 	
-	function addExtraImageSection() {
-		html = `
-			<div class="col border m-3 p-2">
-			<div><label>Extra Image #2:</label></div>
+	function addNextExtraImageSection(index) {
+		htmlExtraImage = `
+			<div class="col border m-3 p-2" id="divExtraImage${index}">
+			<div id="extraImageHeader${index}"><label>Extra Image #${index + 1}:</label></div>
 			<div class="m-3">
-				<img id="extraThumbnail2" alt="extra image #2 preview" class="img-fluid"
+				<img id="extraThumbnail${index}" alt="extra image #${index + 1} preview" class="img-fluid"
 					src="${defaultImageThumbnailSrc}" />
 			</div>
 			<div>
-				<input type="file" id="extraImage2" name="extraImage2" 
+				<input type="file"  name="extraImage" 
+					onchange="showExtraImageThumbnail(this, ${index})"
 					accept="image/png, image/jpeg"/>
 			</div>
 		</div>
 		`;
 		
-		$("#divProductImages").append(html);
+		htmlLinkRemove = `
+		<a class="btn fas fa-times-circle fa-2x icon-dark float-right" 
+			href="javascript:removeExtraImage(${index - 1})"
+			title="remove this image"></a>
+		`;
+		
+		$("#divProductImages").append(htmlExtraImage);
+		$("#extraImageHeader" + (index - 1)).append(htmlLinkRemove);
+		
+		extraImagesCount++;
+
+	}
+	
+	function removeExtraImage(index) {
+		$("#divExtraImage" + index).remove();
+		extraImageCount--;
 	}
 	
 	function getCategories() {
@@ -183,4 +226,5 @@
 	}
 </script>
 <script th:src="@{/js/common_form.js}"></script>
+<script th:src="@{/js/product_form_detail.js}"></script>
 </html>

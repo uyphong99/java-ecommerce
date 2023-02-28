@@ -7,9 +7,19 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
-
+/**
+ * The class handle the uploaded multipart file (image) given the directory as the parameter
+ * */
 public class FileUploadUtil {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadUtil.class);
+	
+	/**
+	 * Create directory, if dir not already exists, make one and store multipart file to dir
+	 * */
 	public static void saveFile(String uploadDir, String fileName,
 			MultipartFile multipartFile) throws IOException {
 		Path uploadPath = Paths.get(uploadDir);
@@ -26,6 +36,9 @@ public class FileUploadUtil {
 		}
 	}
 	
+	/**
+	 * Clear all files in directory except directory.
+	 * */
 	public static void cleanDir(String dir) {
 		Path dirPaths = Paths.get(dir);
 		
@@ -35,12 +48,23 @@ public class FileUploadUtil {
 					try {
 						Files.delete(file);
 					} catch (IOException exception) {
-						System.out.println("Could not delete file: " + file);
+						LOGGER.error("Could not delete file: " + file);
 					}
 				}
 			});
 		} catch (IOException exception) {
-			System.out.println("Could not list directory: " + dirPaths);
+			LOGGER.error("Could not list directory: " + dirPaths);
 		}
+	}
+	
+	public static void removeDir(String dir) {
+		cleanDir(dir);
+		
+		try {
+			Files.delete(Paths.get(dir));
+		} catch (IOException e) {
+			LOGGER.error("Could not remove directory: " + dir);
+		}
+		
 	}
 }

@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org">
 
 <body>
-	<div th:fragment="content" remove="tag">
+	<div th:fragment="content" th:remove="tag">
 		<div class="form-group row">
 			<label class="col-sm-2 col-form-label">Product Name</label>
 			<div class="col-sm-10">
@@ -33,9 +33,18 @@
 		<div class="form-group row">
 			<label class="col-sm-2 col-form-label">Category</label>
 			<div class="col-sm-10">
+				<th:block th:if="${product.category != null}">
+					<select th:field="*{category}" class="form-control" required>
+					<th:block th:each="cat: ${product.brand.categories}">
+						<option th:value="${cat.id}">[[${cat.name}]]</option>
+					</select>
+				</th:block>
+				
+				<th:block th:if="${product.category == null}">
 				<select th:field="*{category}" class="form-control" required>
 					
 				</select>
+				</th:block>
 			</div>
 		</div>
 		

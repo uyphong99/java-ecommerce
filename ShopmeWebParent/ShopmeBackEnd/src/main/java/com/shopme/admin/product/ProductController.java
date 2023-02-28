@@ -61,19 +61,80 @@ public class ProductController {
 	
 	@PostMapping("/products/save")
 	public String saveProduct(Product product, RedirectAttributes redirectAttributes, 
-			@RequestParam("fileImage") MultipartFile multipartFile) throws IOException {
+			@RequestParam("fileImage") MultipartFile mainImageMultipart,
+			@RequestParam("extraImage") MultipartFile[] extraImageMultiparts,
+			@RequestParam(name = "detailNames", required = false) String[] detailNames,
+			@RequestParam(name = "detailValues", required = false) String[] detailValues) throws IOException {
 		
-		String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-		product.setMainImage(fileName);
+		setMainImageName(mainImageMultipart, product);
+		setExtraImageNames(extraImageMultiparts, product);
+		setProductDetails(detailNames, detailValues, product);
 		
 		Product savedProduct = service.save(product);
-		String uploadDir = "../product-images/" + savedProduct.getId();
 		
-		FileUploadUtil.cleanDir(uploadDir);
-		FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+		saveUploadImages(mainImageMultipart, extraImageMultiparts, savedProduct);
+		
 		redirectAttributes.addFlashAttribute("message", "Product has been saved successfully");
 		
 		return "redirect:/products";
+	}
+	
+	
+	
+	private void setProductDetails(String[] detailNames, String[] detailValues, Product product) {
+		if (detailNames == null || detailNames.length == 0) return;
+		
+		for (int count = 0; count < detailNames.length; count++) {
+			String name = detailNames[count];
+			String value = detailValues[count];
+			
+			if (!name.isEmpty() && !value.isEmpty()) {
+				product.addDetail(name, value);
+			}
+		}
+		
+	}
+
+	private void saveUploadImages(MultipartFile mainImageMultipart, MultipartFile[] extraImageMultiparts,
+			Product savedProduct) throws IOException {
+		if (!mainImageMultipart.isEmpty()) {
+			String fileName = StringUtils.cleanPath(mainImageMultipart.getOriginalFilename());
+			String uploadDir = "../product-images/" + savedProduct.getId();
+			
+			FileUploadUtil.cleanDir(uploadDir);
+			FileUploadUtil.saveFile(uploadDir, fileName, mainImageMultipart);
+		}
+		
+		if (extraImageMultiparts.length > 0 ) {
+			String uploadDir = "../product-images/" + savedProduct.getId() + "/extras";
+			
+			for (MultipartFile multipartFile : extraImageMultiparts) {
+				if (multipartFile.isEmpty()) continue;
+				
+				String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+				FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+			}
+		}
+		
+		
+	}
+
+	private void setExtraImageNames(MultipartFile[] extraImageMultiparts, Product product) {
+		if (extraImageMultiparts.length > 0 ) {
+			for (MultipartFile multipartFile : extraImageMultiparts) {
+				if (!multipartFile.isEmpty()) {
+					String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+					product.addExtraImage(fileName);
+				}
+			}
+		}
+	}
+
+	private void setMainImageName(MultipartFile mainImageMultipart, Product product) {
+		if (!mainImageMultipart.isEmpty()) {
+			String fileName = StringUtils.cleanPath(mainImageMultipart.getOriginalFilename());
+			product.setMainImage(fileName);
+		}
 	}
 	
 	@GetMapping("/products/enable/{id}")
@@ -89,7 +150,30 @@ public class ProductController {
 	
 	@GetMapping("/products/delete/{id}")
 	public String deleteProduct(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+		
 		service.deleteProductById(id);
+		String productExtraImgDir = "../product-images/" + id +"/extras";
+		String productImageDir = "../product-images/" + id;
+		
+		FileUploadUtil.removeDir(productExtraImgDir);
+		FileUploadUtil.removeDir(productImageDir);
+		
 		return "redirect:/products";
+	}
+	
+	@GetMapping("/products/edit/{id}")
+	public String updateProduct(@PathVariable("id") Integer id, Model model) {
+		Product product = service.findById(id);
+		List<Brand> listBrands = brandService.findAll();
+		List<Category> listCategories = categoryService.findAll();
+		
+		model.addAttribute("listBrands", listBrands);
+		model.addAttribute("product", product);
+		model.addAttribute("paleTitle", "Edit Product");
+		Integer numberOfExistingExtraImagesInteger = product.getImages().size();
+		
+		model.addAttribute("numberOfExistingExtraImagesInteger", numberOfExistingExtraImagesInteger);
+		
+		return "products/product_form";
 	}
 }
