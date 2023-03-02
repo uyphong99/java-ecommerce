@@ -1,13 +1,13 @@
 package com.shopme.common.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.aspectj.weaver.NewConstructorTypeMunger;
+
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -287,5 +287,34 @@ public class Product {
 	public void addDetail(String name, String value) {
 		ProductDetail detail = new ProductDetail(name, value, this);
 		details.add(detail);
+	}
+	
+	public boolean containsImageName(String imageName) {
+		Iterator<ProductImage> iterator = images.iterator();
+		
+		while (iterator.hasNext()) {
+			ProductImage image = iterator.next();
+			if (image.getName().equals(imageName)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	@Transient
+	public String getShortName() {
+		if (name.length() > 70) {
+			return name.substring(0, 70).concat("...");
+		}
+		return name;
+	}
+	
+	@Transient
+	public float getDiscountPrice() {
+		if (discountPercent > 0) {
+			return price * ((100 - discountPercent) / 100);
+		}
+		return this.price;
 	}
 }

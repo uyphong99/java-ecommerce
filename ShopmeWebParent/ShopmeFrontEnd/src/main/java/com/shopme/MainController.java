@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.shopme.category.CategoryService;
 import com.shopme.common.entity.Category;
+import com.shopme.common.entity.Product;
 
 @Controller
 public class MainController {
@@ -20,6 +21,7 @@ public class MainController {
 	public String viewHomePage(Model model) {
 		
 		List<Category> listCategories = service.listNoChildrenCategories();
+		
 		model.addAttribute("listCategories", listCategories);
 		return "index";
 	}

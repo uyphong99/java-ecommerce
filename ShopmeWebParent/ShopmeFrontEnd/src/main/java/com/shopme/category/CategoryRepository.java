@@ -13,9 +13,13 @@ public interface CategoryRepository extends CrudRepository<Category, Integer> {
 	
 	@Query("SELECT c "
 			+ "FROM Category c "
-			+ "WHERE c.id NOT IN ( "
+			+ "WHERE c.enabled = true AND c.id NOT IN ( "
 			+ "SELECT c.parent FROM Category c "
 			+ "WHERE c.parent IS NOT NULL "
 			+ ")")
 	public List<Category> findAllChildrenCategories();
+	
+	@Query("SELECT c FROM Category c "
+			+ "WHERE c.alias = ?1 AND c.enabled = true")
+	public Category findByAliasAndEnabled(String alias);
 }
