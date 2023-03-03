@@ -25,4 +25,14 @@ public class ProductService {
 		
 		return repository.findAllByCategory(subCategories, pageable);
 	}
+	
+	public Product findProductByAlias(String alias) {
+		return repository.findByAlias(alias);
+	}
+	
+	public Page<Product> findProductByKeyword(String keyword, Integer pageNum) {
+		Pageable pageable = PageRequest.of(pageNum - 1, PRODUCTS_PER_PAGE);
+		
+		return repository.searchProductsByKeyword(keyword, pageable);
+	}
 }
