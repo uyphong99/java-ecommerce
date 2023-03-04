@@ -49,4 +49,11 @@ public class SettingRepositoryTests {
 				decimalDigits, thousandsPointType));
 		
 	}
+	
+	@Test
+	public void testFindValueByKey() {
+		String valueString = settingRepository.findValueByKey("CURRENCY_SYMBOL");
+		
+		assertThat(valueString.equals("$")).isTrue();
+	}
 }

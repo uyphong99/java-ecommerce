@@ -2,7 +2,6 @@ package com.shopme.admin.setting;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -46,5 +45,13 @@ public class CurrencyRepositoryTests {
 		repository.saveAll(listCurrencies);
 		
 		assertThat(repository.count()).isGreaterThan(0);
+	}
+	
+	@Test
+	public void testFindAllCurrencies() {
+		List<Currency> currencies = repository.findAllOrderById();
+		
+		assertThat(currencies.size()).isGreaterThan(10);
+		assertThat(currencies.get(0).getId()).isEqualTo(2);
 	}
 }
