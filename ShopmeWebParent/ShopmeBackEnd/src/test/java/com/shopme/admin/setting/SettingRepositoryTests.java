@@ -56,4 +56,11 @@ public class SettingRepositoryTests {
 		
 		assertThat(valueString.equals("$")).isTrue();
 	}
+	
+	@Test
+	void findByKeyTest() {
+		Setting siteLogo = settingRepository.findByKey("SITE_LOGO");
+		
+		assertThat(siteLogo.getValue()).isEqualTo("ShopmeAdminSmall.png");
+	}
 }

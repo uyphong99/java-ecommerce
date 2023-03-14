@@ -2,6 +2,7 @@ package com.shopme.admin;
 
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -66,5 +67,30 @@ public class FileUploadUtil {
 			LOGGER.error("Could not remove directory: " + dir);
 		}
 		
+	}
+	
+	public static void deleteImageFolder(String dir) {
+		
+		File[] files = new File(dir).listFiles();
+		
+		if (files == null) return;
+		
+		for (File file: files) {
+			file.delete();
+		}
+	}
+	
+	public static void moveFile(String fromPath, String toPath, String newName) throws IOException {
+		Path source = Paths.get(fromPath);
+		Path to = Paths.get(toPath);
+		
+		Files.move(source, to.resolve(newName), StandardCopyOption.REPLACE_EXISTING);
+	}
+	
+	public static void changeImageName(String folderName, String oldFileName, String newName) throws IOException {
+		Path siteLogePath = Paths.get(folderName).resolve(oldFileName);
+		
+		//System.out.println(siteLogePath);
+		Files.move(siteLogePath, siteLogePath.resolveSibling(newName), StandardCopyOption.REPLACE_EXISTING);
 	}
 }

@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
 	
 	private static final List<String> PATHS = List.of("user-photos", "../category-images", "../brands-logos",
-														"../product-images");
+														"../product-images", "../site-logo");
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {

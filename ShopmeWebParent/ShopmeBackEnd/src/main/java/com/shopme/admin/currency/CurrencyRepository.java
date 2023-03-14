@@ -11,4 +11,7 @@ public interface CurrencyRepository extends JpaRepository<Currency, Integer>{
 	
 	@Query("SELECT c FROM Currency c ORDER BY c.id")
 	public List<Currency> findAllOrderById();
+	
+	@Query("SELECT c.symbol FROM Currency c WHERE c.id = ?1")
+	public String findSymbolById(Integer id);
 }

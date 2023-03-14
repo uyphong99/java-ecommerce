@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.shopme.common.entity.Currency;
+import com.shopme.common.entity.Setting;
 
 @Service
 public class SettingService {
@@ -18,5 +18,15 @@ public class SettingService {
 		return repository.findValueByKey(key);
 	}
 	
+	public List<Setting> findAllSettings() {
+		return repository.findAll();
+	}
 	
+	public void save(Setting setting) {
+		repository.save(setting);
+	}
+	
+	public Setting findByKey(String key) {
+		return repository.findByKey(key);
+	}
 }

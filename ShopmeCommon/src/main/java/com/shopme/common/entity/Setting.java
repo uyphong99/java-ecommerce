@@ -11,10 +11,10 @@ import jakarta.persistence.Table;
 @Table(name = "settings")
 public class Setting {
 	@Id
-	@Column(name = "`key`",nullable = false, length = 128)
+	@Column(name = "`key`",nullable = true, length = 128)
 	private String key;
 	
-	@Column(nullable = false, length= 1024)
+	@Column(nullable = true, length= 1024)
 	private String value;
 	
 	@Enumerated(EnumType.STRING)
