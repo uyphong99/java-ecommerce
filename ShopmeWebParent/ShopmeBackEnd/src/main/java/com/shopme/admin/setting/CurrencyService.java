@@ -18,4 +18,10 @@ public class CurrencyService {
 	public List<Currency> findAllCurrencyOrderById() {
 		return repository.findAllOrderById();
 	}
+	
+	public String findSymbolById(Integer currencyId) {
+		return repository.findSymbolById(currencyId);
+	}
+	
+	
 }

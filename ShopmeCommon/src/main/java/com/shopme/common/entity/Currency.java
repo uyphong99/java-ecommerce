@@ -64,7 +64,7 @@ public class Currency {
 	}
 	
 	public String toString() {
-		return this.name + " - " + this.symbol;
+		return this.name + " - " + this.code + " - " + this.symbol;
 	}
 	
 }

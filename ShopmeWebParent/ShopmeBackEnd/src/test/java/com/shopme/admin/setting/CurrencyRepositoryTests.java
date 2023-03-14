@@ -54,4 +54,13 @@ public class CurrencyRepositoryTests {
 		assertThat(currencies.size()).isGreaterThan(10);
 		assertThat(currencies.get(0).getId()).isEqualTo(2);
 	}
+	
+	@Test
+	public void testFindSymbolById() {
+		Integer id = 4;
+		
+		String symbol = repository.findSymbolById(id);
+		
+		assertThat(symbol.equals("¥")).isTrue();
+	}
 }
