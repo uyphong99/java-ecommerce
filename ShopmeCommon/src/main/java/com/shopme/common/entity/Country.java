@@ -3,6 +3,9 @@ package com.shopme.common.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,6 +25,9 @@ public class Country {
 	
 	private String name;
 	
+	private String code;
+	
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
 			mappedBy = "country")
 	private Set<State> states = new HashSet<>();
@@ -29,9 +35,9 @@ public class Country {
 	public Country() {
 	}
 
-	public Country(String name, Set<State> states) {
+	public Country(String name, String code) {
 		this.name = name;
-		this.states = states;
+		this.code = code;
 	}
 
 	public String getName() {
@@ -49,6 +55,23 @@ public class Country {
 	public void setStates(Set<State> states) {
 		this.states = states;
 	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
 	
 	
 }
