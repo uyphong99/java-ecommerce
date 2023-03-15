@@ -23,7 +23,7 @@ public class WebSecurityConfig {
 				authorize.requestMatchers("/login").permitAll();
 				authorize.requestMatchers("/account/update", "/account").authenticated();
 				authorize.requestMatchers("/").authenticated();
-				authorize.requestMatchers("/users", "/users/**").hasAuthority("Admin");
+				authorize.requestMatchers("/users", "/users/**", "/settings/**", "/countries/**", "/states/**").hasAuthority("Admin");
 				authorize.requestMatchers("/categories", "/categories/**").hasAnyAuthority("Admin", "Editor");
 				authorize.requestMatchers("/brands/**").hasAnyAuthority("Admin", "Editor");
 				authorize.requestMatchers("/products/**").hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper");
