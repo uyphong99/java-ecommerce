@@ -31,5 +31,7 @@ public class StateDTO {
 		this.id = id;
 	}
 	
-	
+	public String toString() {
+		return this.name;
+	}
 }
