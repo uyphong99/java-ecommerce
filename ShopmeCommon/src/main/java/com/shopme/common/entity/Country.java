@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -38,6 +37,10 @@ public class Country {
 	public Country(String name, String code) {
 		this.name = name;
 		this.code = code;
+	}
+	
+	public Country(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {

@@ -1,4 +1,4 @@
-package com.shopme.admin.setting;
+package com.shopme.admin.setting.state;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -7,8 +7,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,20 +14,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shopme.admin.setting.country.CountryRepository;
 import com.shopme.common.entity.Country;
-
+import com.shopme.common.entity.State;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RestControllerTests {
-	
-	@Autowired
-	private WebApplicationContext context;
-	
+public class StateRestControllerTests {
 	@Autowired
 	private MockMvc mockMvc;
 	
@@ -37,45 +30,45 @@ public class RestControllerTests {
 	private ObjectMapper objectMapper;
 	
 	@Autowired
-	private CountryRepository repository;
-	
-	
+	private StateRepository repository;
 	
 	@Test
 	@WithMockUser(username = "nam@codejava.net", password = "something", authorities = "Admin")
-	void countryRestControllerTest() throws Exception {
-		MvcResult result = mockMvc.perform(get("/countries/list"))
-			.andExpect(status().isOk())
-			.andDo(print())
-			.andReturn();
+	void testListStateByCountry() throws Exception {
+		String savingURL = "/states/list_by_country/242";
+		
+		MvcResult result = mockMvc.perform(get(savingURL))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn();
 		
 		String jsonResponse = result.getResponse().getContentAsString();
-		Country[] countries = objectMapper.readValue(jsonResponse, Country[].class);
+		StateDTO[] stateDTOs = objectMapper.readValue(jsonResponse, StateDTO[].class);
 		
-		assertThat(countries).hasSizeGreaterThan(0);
+		assertThat(stateDTOs.length).isGreaterThan(55);
 	}
 	
 	@Test
 	@WithMockUser(username = "nam@codejava.net", password = "something", authorities = "Admin")
-	void countrySaveTest() throws Exception {
-		Country country = new Country("Germany", "DE"); 
+	void testSaveState() throws JsonProcessingException, Exception {
+		Country vietnam = new Country(242);
+		State state = new State("Kon Tum",vietnam);
 		
-		MvcResult result = mockMvc.perform(post("/countries/save").contentType("application/json")
-				.content(objectMapper.writeValueAsString(country))
-				.with(csrf()))
+		String saveURL = "/states/save";
+		MvcResult result = mockMvc.perform(post(saveURL)
+				.contentType("application/json")
+				.content(objectMapper.writeValueAsString(state))
+						.with(csrf()))
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andReturn();
 		
 		String jsonResponse = result.getResponse().getContentAsString();
-		Integer countryId = Integer.parseInt(jsonResponse);
+		Integer stateId = Integer.valueOf(jsonResponse);
 		
-		Optional<Country> savedCountry = repository.findById(countryId);
+		State savedState = repository.findById(stateId).get();
 		
-		assertThat(savedCountry.isPresent());
-		assertThat(savedCountry.get().getName()).isEqualTo("Germany");
-		
+		assertThat(savedState.getCountry().getName().equals("Vietnam"));
+		assertThat(savedState.getName().equals("Kon Tum"));
 	}
-	
-	
 }

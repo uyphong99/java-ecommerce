@@ -40,7 +40,7 @@
 		  	<div th:replace="settings/general :: content" />
 		  </div>
 		  <div class="tab-pane" id="countries" role="tabpanel">
-			<h2>Countries</h2>
+			<div th:replace="settings/countries :: content"></div>
 		  </div>
 		  <div class="tab-pane" id="states" role="tabpanel">
 			<h2>States</h2>
@@ -60,7 +60,11 @@
 </div>
 <script type="text/javascript">
 	MAX_FILE_SIZE = 102400; // 100KB
+	contextPath = "[[@{/}]]";
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
 </script>
 <script th:src="@{/js/common_form.js}"></script>
+<script th:src="@{/js/countries_setting.js}"></script>
 </body>
 </html>

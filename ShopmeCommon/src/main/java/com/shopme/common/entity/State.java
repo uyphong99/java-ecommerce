@@ -7,6 +7,7 @@ import java.util.Set;
 import org.aspectj.weaver.NewConstructorTypeMunger;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +24,7 @@ public class State {
 	
 	private String name;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "country_id")
 	private Country country;
 
