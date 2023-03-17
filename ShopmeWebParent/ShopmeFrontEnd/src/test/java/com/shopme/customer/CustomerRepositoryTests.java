@@ -53,4 +53,11 @@ public class CustomerRepositoryTests {
 		
 		assertThat(customer).isNotNull();
 	}
+	
+	@Test
+	void existByEmailTest() {
+		Boolean exist = repository.existsByEmail("uyphong99@gmail.com");
+		
+		assertThat(exist).isTrue();
+	}
 }
