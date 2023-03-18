@@ -11,8 +11,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -59,28 +65,6 @@ public class Customer {
 	
 	@Column(name = "verification_code")
 	private String verificationCode;
-
-	public Customer() {
-	}
-
-	public Customer(String email, String password, String firstName, String lastName, String phoneNumber,
-			String addressLine1, String addressLine2, String city, String state, Country country, String postalCode,
-			LocalDateTime createTime, Boolean enabled, String verificationCode) {
-		this.email = email;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.phoneNumber = phoneNumber;
-		this.addressLine1 = addressLine1;
-		this.addressLine2 = addressLine2;
-		this.city = city;
-		this.state = state;
-		this.country = country;
-		this.postalCode = postalCode;
-		this.createTime = createTime;
-		this.enabled = enabled;
-		this.verificationCode = verificationCode;
-	}
 
 	public Integer getId() {
 		return id;

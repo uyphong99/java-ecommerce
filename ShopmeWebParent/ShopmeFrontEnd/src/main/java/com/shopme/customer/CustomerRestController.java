@@ -8,7 +8,7 @@ public class CustomerRestController {
 	@Autowired
 	private CustomerService service;
 	
-	public Boolean checkDuplicateEmail(String email) {
+	public Boolean checkUniqueEmail(String email) {
 		return true;
 	}
 }

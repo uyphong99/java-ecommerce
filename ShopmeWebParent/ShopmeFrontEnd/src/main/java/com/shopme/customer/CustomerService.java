@@ -26,21 +26,24 @@ public class CustomerService {
 		return repository.findByEmail(email);
 	}
 	
-	
-	public Boolean isUniqueEmail(Customer customer) {
+	/**
+	 * If id != null and email equals old email return true.
+	 * If id == null and not exists duplicated email return true.
+	 *
+	 */
+	public boolean isUniqueEmail(Customer customer) {
 		String email = customer.getEmail();
-		
-		if(customer.getId() == null) {
-			if (existsByEmail(email)) {
-				return false;
-			}
-		} else {
-			String oldEmail = repository.findEmailById(customer.getId());
-			if (!email.equals(oldEmail)) {
-				return false;
-			}
+		Integer id = customer.getId();
+
+		if (id == null) {
+			return !repository.existsByEmail(email);
 		}
-		
-		return true;
+
+		String oldEmail = repository.findEmailById(id);
+		return email.equals(oldEmail) || !repository.existsByEmail(email);
+	}
+
+	public Customer save(Customer customer) {
+		return repository.save(customer);
 	}
 }
