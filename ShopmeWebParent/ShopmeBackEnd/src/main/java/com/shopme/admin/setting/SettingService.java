@@ -2,6 +2,7 @@ package com.shopme.admin.setting;
 
 import java.util.List;
 
+import com.shopme.common.entity.SettingCategory;
 import org.springframework.stereotype.Service;
 
 import com.shopme.common.entity.Setting;
@@ -28,5 +29,9 @@ public class SettingService {
 	
 	public Setting findByKey(String key) {
 		return repository.findByKey(key);
+	}
+
+	public List<Setting> findAllByCategoryIn(SettingCategory... category) {
+		return repository.findByCategoryIn(category);
 	}
 }
