@@ -3,12 +3,14 @@ package com.shopme.admin.setting;
 import java.io.IOException;
 import java.util.List;
 
+import com.shopme.common.entity.SettingCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -33,11 +35,13 @@ public class SettingController {
 	@GetMapping("/settings")
 	public String getSettingPage(Model model) {
 		
-		List<Setting> settings = service.findAllSettings();
-		
+		List<Setting> settings = service.findAllByCategoryIn(SettingCategory.GENERAL, SettingCategory.CURRENCY,
+				SettingCategory.MAIL_SERVER, SettingCategory.MAIL_TEMPLATES);
+
 		addAttributesToModel(model, settings);
-		
+
 		List<Currency> listCurrencies = currencyService.findAllCurrencyOrderById();
+
 		model.addAttribute("listCurrencies", listCurrencies);
 		
 		return "settings/settings";
@@ -53,11 +57,13 @@ public class SettingController {
 	public String saveSettings(RedirectAttributes redirectAttributes,
 				@RequestParam("fileImage") MultipartFile multipartFile,
 				HttpServletRequest request) throws IOException {
-		
-		List<Setting> settings = service.findAllSettings();
+
+		List<Setting> settings = service.findAllByCategoryIn(SettingCategory.CURRENCY, SettingCategory.GENERAL);
 		Setting logoSetting = service.findByKey("SITE_LOGO");
 		
 		saveAllSettings(settings, request);
+		//saveAllSettings();
+
 		saveCurrencySymbol();
 		
 		if (!multipartFile.isEmpty()) {
@@ -98,5 +104,29 @@ public class SettingController {
 		service.save(logo);
 		
 		FileUploadUtil.changeImageName(uploadDir, fileName, "ShopmeAdminSmall.png"); //replace exist image in folder
+	}
+
+	@PostMapping("/settings/save_mail_server")
+	public String saveMailServer(RedirectAttributes redirectAttributes,
+								 HttpServletRequest request) {
+
+		List<Setting> mailServerSettings = service.findAllByCategoryIn(SettingCategory.MAIL_SERVER);
+		saveAllSettings(mailServerSettings, request);
+
+		redirectAttributes.addFlashAttribute("message", "Saved settings");
+
+		return "redirect:/settings";
+	}
+
+	@PostMapping("/settings/save_mail_templates")
+	public String saveMailTemplates(RedirectAttributes redirectAttributes,
+								 HttpServletRequest request) {
+
+		List<Setting> mailServerSettings = service.findAllByCategoryIn(SettingCategory.MAIL_TEMPLATES);
+		saveAllSettings(mailServerSettings, request);
+
+		redirectAttributes.addFlashAttribute("message", "Saved settings");
+
+		return "redirect:/settings";
 	}
 }

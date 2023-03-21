@@ -1,6 +1,7 @@
 package com.shopme.setting;
 
 import java.util.List;
+import java.util.Set;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,9 @@ public interface SettingRepository extends JpaRepository<Setting, Integer> {
 	public List<Setting> findByTwoCategory(SettingCategory catOne, SettingCategory catTwo);
 	
 	public List<Setting> findByCategory(SettingCategory category);
+
+	@Query("SELECT s.value FROM Setting s WHERE s.key = ?1")
+	public String findValueByKey(String key);
+
+	public Set<Setting> findAllByCategoryContains(SettingCategory... categories);
 }

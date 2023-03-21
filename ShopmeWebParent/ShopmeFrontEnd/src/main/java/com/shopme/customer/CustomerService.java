@@ -1,7 +1,10 @@
 package com.shopme.customer;
 
 import java.util.List;
+import java.util.Random;
 
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.shopme.common.entity.Country;
@@ -9,10 +12,13 @@ import com.shopme.common.entity.Customer;
 import com.shopme.setting.country.CountryRepository;
 
 @Service
+@AllArgsConstructor
 public class CustomerService {
 	private CustomerRepository repository;
 	
-	public CountryRepository countryRepository;
+	private CountryRepository countryRepository;
+
+	private PasswordEncoder encoder;
 	
 	public List<Country> listAllCountry() {
 		return countryRepository.listAllCountry();
@@ -44,6 +50,36 @@ public class CustomerService {
 	}
 
 	public Customer save(Customer customer) {
+		String encodedPassword = encoder.encode(customer.getPassword());
+		customer.setPassword(encodedPassword);
+		//customer.setEnabled(false);
+
+		String verificationCode = generateRandomString();
+		customer.setVerificationCode(verificationCode);
+
 		return repository.save(customer);
+	}
+
+	public String generateRandomString() {
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		int length = 64;
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < length; i++) {
+			int index = random.nextInt(characters.length());
+			char randomChar = characters.charAt(index);
+			sb.append(randomChar);
+		}
+
+		return sb.toString();
+	}
+
+	public boolean existsByVerificationCode(String code) {
+		return repository.existsByVerificationCode(code);
+	}
+
+	public Customer findByVerificationCode(String code) {
+		return repository.findByVerificationCode(code);
 	}
 }

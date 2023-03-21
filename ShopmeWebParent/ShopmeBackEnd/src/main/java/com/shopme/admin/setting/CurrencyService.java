@@ -22,6 +22,5 @@ public class CurrencyService {
 	public String findSymbolById(Integer currencyId) {
 		return repository.findSymbolById(currencyId);
 	}
-	
-	
+
 }

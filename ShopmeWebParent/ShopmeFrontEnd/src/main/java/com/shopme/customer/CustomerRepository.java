@@ -16,4 +16,6 @@ public interface CustomerRepository extends CrudRepository<Customer, Integer> {
 	
 	@Query("SELECT c.email FROM Customer c WHERE c.id = ?1")
 	public String findEmailById(Integer id);
+
+	public Boolean existsByVerificationCode(String code);
 }

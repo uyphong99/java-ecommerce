@@ -19,4 +19,8 @@ public class SettingService {
 	public List<Setting> getGeneralSettings() {
 		return repository.findByTwoCategory(SettingCategory.GENERAL, SettingCategory.CURRENCY);
 	}
+
+	public String findValueByKey(String key) {
+		return repository.findValueByKey(key);
+	}
 }

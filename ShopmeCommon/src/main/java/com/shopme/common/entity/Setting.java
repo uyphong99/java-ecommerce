@@ -52,6 +52,19 @@ public class Setting {
 	public void setCategory(SettingCategory category) {
 		this.category = category;
 	}
-	
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Setting setting)) return false;
+
+		if (getKey() != null ? !getKey().equals(setting.getKey()) : setting.getKey() != null) return false;
+		if (getValue() != null ? !getValue().equals(setting.getValue()) : setting.getValue() != null) return false;
+		return getCategory() == setting.getCategory();
+	}
+
+	@Override
+	public int hashCode() {
+		return getKey() != null ? getKey().hashCode() : 0;
+	}
 }
