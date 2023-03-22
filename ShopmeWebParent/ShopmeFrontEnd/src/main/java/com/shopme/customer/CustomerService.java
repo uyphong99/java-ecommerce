@@ -52,7 +52,7 @@ public class CustomerService {
 	public Customer save(Customer customer) {
 		String encodedPassword = encoder.encode(customer.getPassword());
 		customer.setPassword(encodedPassword);
-		//customer.setEnabled(false);
+		customer.setEnabled(true);
 
 		String verificationCode = generateRandomString();
 		customer.setVerificationCode(verificationCode);

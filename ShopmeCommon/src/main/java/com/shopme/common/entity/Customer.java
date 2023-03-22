@@ -186,5 +186,7 @@ public class Customer {
 		this.verificationCode = verificationCode;
 	}
 	
-	
+	public String getFullName() {
+		return firstName + " " + lastName;
+	}
 }
