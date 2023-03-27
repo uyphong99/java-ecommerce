@@ -1,5 +1,7 @@
 package com.shopme.customer;
 
+import com.shopme.common.entity.AuthenticationType;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -18,4 +20,11 @@ public interface CustomerRepository extends CrudRepository<Customer, Integer> {
 	public String findEmailById(Integer id);
 
 	public Boolean existsByVerificationCode(String code);
+
+	@Query("UPDATE Customer c SET c.authenticationType = ?1 WHERE c.id = ?2")
+	@Modifying
+	public void updateAuthenticationType(AuthenticationType type, Integer customerId);
+
+	@Query("SELECT c FROM Customer c WHERE c.resetPasswordToken = ?1")
+	public Customer findCustomerByResetPasswordToken(String resetToken);
 }

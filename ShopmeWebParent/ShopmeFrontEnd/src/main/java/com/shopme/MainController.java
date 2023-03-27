@@ -25,4 +25,9 @@ public class MainController {
 		model.addAttribute("listCategories", listCategories);
 		return "index";
 	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
 }

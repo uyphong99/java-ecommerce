@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import com.shopme.common.entity.AuthenticationType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -59,5 +60,14 @@ public class CustomerRepositoryTests {
 		Boolean exist = repository.existsByEmail("uyphong99@gmail.com");
 		
 		assertThat(exist).isFalse();
+	}
+
+	@Test
+	void customerAuthenticationTest() {
+		Integer id = 1;
+		repository.updateAuthenticationType(AuthenticationType.GOOGLE, id);
+		Customer customer = repository.findById(id).get();
+
+		assertThat(customer.getAuthenticationType().equals(AuthenticationType.GOOGLE)).isTrue();
 	}
 }

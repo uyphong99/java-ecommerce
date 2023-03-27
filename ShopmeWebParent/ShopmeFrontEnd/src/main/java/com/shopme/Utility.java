@@ -1,6 +1,5 @@
 package com.shopme;
 
-import com.shopme.common.entity.EmailSetting;
 import com.shopme.setting.EmailSettingBag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;

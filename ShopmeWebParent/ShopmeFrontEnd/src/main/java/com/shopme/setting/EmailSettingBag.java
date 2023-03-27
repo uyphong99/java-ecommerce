@@ -11,7 +11,7 @@ public class EmailSettingBag {
     private SettingService settingService;
 
     public String getMailFrom() {
-        return settingService.findValueByKey("MAIL_FORM");
+        return settingService.findValueByKey("MAIL_FROM");
     }
 
     public String getHost() {

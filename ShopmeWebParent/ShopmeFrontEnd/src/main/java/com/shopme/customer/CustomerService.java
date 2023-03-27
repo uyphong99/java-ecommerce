@@ -1,8 +1,10 @@
 package com.shopme.customer;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
+import com.shopme.common.entity.AuthenticationType;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -50,19 +52,21 @@ public class CustomerService {
 	}
 
 	public Customer save(Customer customer) {
-		String encodedPassword = encoder.encode(customer.getPassword());
-		customer.setPassword(encodedPassword);
-		customer.setEnabled(true);
+		if (customer.getPassword() != null) {
+			String encodedPassword = encoder.encode(customer.getPassword());
+			customer.setPassword(encodedPassword);
+		}
 
-		String verificationCode = generateRandomString();
+		customer.setEnabled(false);
+
+		String verificationCode = generateRandomString(64);
 		customer.setVerificationCode(verificationCode);
 
 		return repository.save(customer);
 	}
 
-	public String generateRandomString() {
+	public String generateRandomString(Integer length) {
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-		int length = 64;
 		Random random = new Random();
 		StringBuilder sb = new StringBuilder();
 
@@ -81,5 +85,51 @@ public class CustomerService {
 
 	public Customer findByVerificationCode(String code) {
 		return repository.findByVerificationCode(code);
+	}
+
+	public void updateCustomerAuthentication(AuthenticationType type, Integer customerId) {
+		repository.updateAuthenticationType(type, customerId);
+	}
+
+	public void addNewCustomerUponOAuthLogin(String name, String email, String countryCode,
+											 AuthenticationType authType) {
+		String[] customerName = name.split(" ");
+		String firstName = customerName[0];
+		String lastName = customerName[customerName.length - 1];
+		Customer customer = Customer.builder()
+				.email(email)
+				.firstName(firstName)
+				.lastName(lastName)
+				.country(countryRepository.findByCode(countryCode))
+				.enabled(true)
+				.authenticationType(authType)
+				.createTime(LocalDateTime.now())
+				.build();
+
+		repository.save(customer);
+	}
+
+	public void updateCustomerAuthenticationType(Customer customer, AuthenticationType authenticationType) {
+		customer.setAuthenticationType(authenticationType);
+	}
+
+	public void resetVerifyCode(String email) {
+		Customer customer = repository.findByEmail(email);
+		String newCode = generateRandomString(64);
+
+		customer.setVerificationCode(newCode);
+		save(customer);
+	}
+
+	public void generateResetPasswordToken(String email) {
+		Customer customer = repository.findByEmail(email);
+		String resetToken = generateRandomString(30);
+
+		customer.setResetPasswordToken(resetToken);
+		save(customer);
+	}
+
+	public Customer findByToken(String token) {
+		return repository.findCustomerByResetPasswordToken(token);
 	}
 }
