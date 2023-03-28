@@ -91,6 +91,7 @@ public class ForgotPasswordController {
     public String resetPassword(@Param("password") String password,
                                 @Param("token") String token,
                                 Model model) {
+
         if (password == null || token == null) {
             model.addAttribute("pageTitle", "Reset Your Password");
             model.addAttribute("title", "Reset Your Password");
