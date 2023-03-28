@@ -88,15 +88,29 @@ public class ForgotPasswordController {
     }
 
     @PostMapping("/reset_password")
-    public String resetPassword(HttpServletRequest request) {
-        String resetPasswordToken = request.getParameter("token");
-        String password = request.getParameter("password");
+    public String resetPassword(@Param("password") String password,
+                                @Param("token") String token,
+                                Model model) {
+        if (password == null || token == null) {
+            model.addAttribute("pageTitle", "Reset Your Password");
+            model.addAttribute("title", "Reset Your Password");
+            model.addAttribute("message", "ERROR: Null value");
 
-        Customer customer = customerService.findByToken(resetPasswordToken);
+            return "message";
+        }
 
-        customer.setPassword(encoder.encode(password));
-        customerService.save(customer);
+        try {
+            Customer customer = customerService.resetPassword(password, token);
 
-        return "redirect:/login";
+            model.addAttribute("pageTitle", "Reset Your Password");
+            model.addAttribute("title", "Reset Your Password");
+            model.addAttribute("message", "You have successfully changed your password for account "
+                    + customer.getEmail() + ".");
+        } catch (CustomerNotFoundException e) {
+            model.addAttribute("pageTitle", "Invalid Token");
+            model.addAttribute("message", e.getMessage());
+        }
+
+        return "message";
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.shopme.common.entity.AuthenticationType;
+import com.shopme.common.exception.CustomerNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -131,5 +132,16 @@ public class CustomerService {
 
 	public Customer findByToken(String token) {
 		return repository.findCustomerByResetPasswordToken(token);
+	}
+
+	public Customer resetPassword(String password, String token) throws CustomerNotFoundException {
+		String encodedPassword = encoder.encode(password);
+		Customer customer = findByToken(token);
+
+		customer.setPassword(encodedPassword);
+
+		repository.save(customer);
+
+		return customer;
 	}
 }
