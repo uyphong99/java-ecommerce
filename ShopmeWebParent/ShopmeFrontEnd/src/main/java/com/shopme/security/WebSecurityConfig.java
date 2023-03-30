@@ -22,17 +22,20 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 	private PasswordEncoder encoder;
 	private Oauth2LoginSuccessHandler successHandler;
+	private DatabaseLoginSuccessHandler databaseLoginSuccessHandler;
 	private CustomerOauth2UserService oauth2UserService;
 	@Bean                                                            
 	public SecurityFilterChain formLoginFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests(authorize -> {
-				authorize.requestMatchers("/customer").authenticated();
+				authorize.requestMatchers("/account_details", "/update_account_details", "/cart").authenticated();
 				authorize.anyRequest().permitAll();
 			})
 			.formLogin()
 				.loginPage("/login")
 				.usernameParameter("email")
+				.successHandler(databaseLoginSuccessHandler)
+				.permitAll()
 			.and()
 				.oauth2Login()
 				.loginPage("/login")
@@ -46,6 +49,7 @@ public class WebSecurityConfig {
 				.rememberMe()
 				.key("1234567890_aBcDeFgHyKlMn")
 				.tokenValiditySeconds(14 * 24 * 60 * 60)
+				.userDetailsService(userDetailsService())
 			;
 		return http.build();
 	}

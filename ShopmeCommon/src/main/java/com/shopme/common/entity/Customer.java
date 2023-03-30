@@ -204,4 +204,8 @@ public class Customer {
 	public void setResetPasswordToken(String resetPasswordToken) {
 		this.resetPasswordToken = resetPasswordToken;
 	}
+
+	public String toString() {
+		return this.email;
+	}
 }

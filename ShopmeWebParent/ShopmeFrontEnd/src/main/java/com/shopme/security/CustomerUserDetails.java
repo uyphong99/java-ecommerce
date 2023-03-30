@@ -42,7 +42,7 @@ public class CustomerUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return customer.getEnabled();
     }
 
     public String getFullName() {
@@ -50,4 +50,8 @@ public class CustomerUserDetails implements UserDetails {
     }
 
     public Customer getCustomer() {return this.customer;}
+
+    public String getName() {
+        return customer.getEmail();
+    }
 }

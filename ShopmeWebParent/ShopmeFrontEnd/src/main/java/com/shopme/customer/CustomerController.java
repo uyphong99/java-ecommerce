@@ -3,7 +3,6 @@ package com.shopme.customer;
 import com.shopme.Utility;
 import com.shopme.common.entity.Country;
 import com.shopme.common.entity.Customer;
-import com.shopme.security.oauth.CustomerOauth2User;
 import com.shopme.setting.EmailSettingBag;
 import com.shopme.setting.country.CountryService;
 import jakarta.mail.MessagingException;
@@ -44,7 +43,7 @@ public class CustomerController {
 
     @PostMapping("/create_customer")
     public String saveCustomer(Customer customer, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
-        Customer savedCustomer = service.save(customer);
+        Customer savedCustomer = service.saveRegister(customer);
         sendVerificationEmail(request, customer);
 
         return "register/register_success";
@@ -82,15 +81,22 @@ public class CustomerController {
             Customer customer = service.findByVerificationCode(verificationCode);
 
             customer.setEnabled(true);
+            service.save(customer);
         }
         return "redirect:/login";
     }
 
     @GetMapping("/account_details")
     public String viewCustomerDetail(Authentication authentication, Model model) {
-        CustomerOauth2User customerOauth2User = (CustomerOauth2User) authentication.getPrincipal();
-        String email = customerOauth2User.getEmail();
+        String email = utility.getUserEmail(authentication);
+
+        System.out.println("Test email: " + email);
+
         Customer customer = service.findByEmail(email);
+
+        System.out.println("Test API: " + customer);
+
+
 
         List<Country> listCountries = countryService.findAll();
 
