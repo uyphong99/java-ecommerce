@@ -43,9 +43,9 @@ public class CustomerRepositoryTests {
 	
 	@Test
 	void findByEmailTest() {
-		String email = "uyphong99@gmail.com";
+		String email = "uycuno1@outlook.com.vn";
 		Customer customer = repository.findByEmail(email);
-		assertThat(customer.getId()).isNull();
+		assertThat(customer.getId()).isNotNull();
 	}
 	
 	@Test

@@ -35,4 +35,8 @@ public class ProductService {
 		
 		return repository.searchProductsByKeyword(keyword, pageable);
 	}
+
+	public Product findById(Integer id) {
+		return repository.findById(id).get();
+	}
 }

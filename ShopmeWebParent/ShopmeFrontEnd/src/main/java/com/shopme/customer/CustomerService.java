@@ -7,6 +7,7 @@ import java.util.Random;
 import com.shopme.common.entity.AuthenticationType;
 import com.shopme.common.exception.CustomerNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -53,12 +54,17 @@ public class CustomerService {
 	}
 
 	public Customer save(Customer customer) {
+		return repository.save(customer);
+	}
+
+	public Customer saveRegister(Customer customer) {
 		if (customer.getPassword() != null) {
 			String encodedPassword = encoder.encode(customer.getPassword());
 			customer.setPassword(encodedPassword);
 		}
 
 		customer.setEnabled(false);
+		customer.setCreateTime(LocalDateTime.now());
 
 		String verificationCode = generateRandomString(64);
 		customer.setVerificationCode(verificationCode);
