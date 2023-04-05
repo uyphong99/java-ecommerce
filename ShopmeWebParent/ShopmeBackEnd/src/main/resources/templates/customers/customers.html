@@ -5,9 +5,7 @@
 <div class="container-fluid">
 	<div th:replace="navigation :: menu"></div>
 	<div>
-		<h2>Manage Customers</h2>	
-		
-		<a th:href="@{/customers/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
+		<h2>Manage Customers</h2>
 	</div>
 		
 	<div th:replace="fragments :: search_form_and_message('/customers/page/1')" />

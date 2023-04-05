@@ -10,18 +10,18 @@
 		<a th:href="@{/shipping_rates/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
 	</div>
 		
-	<div th:replace="fragments :: search_form_and_message" />
+	<div th:replace="fragments :: search_form_and_message()" />
 	
 	<div class="full-details">
 		<table class="table table-bordered table-striped table-hover table-responsive-xl">
 			<thead class="thead-dark">
 				<tr>
-					<th th:replace="fragments :: column_linkk('id', 'ID', 'none')" />
-					<th th:replace="fragments :: column_linkk('country', 'Country', 'none')" />
-					<th th:replace="fragments :: column_linkk('state', 'State', 'none')" />
-					<th th:replace="fragments :: column_linkk('rate', 'Rate', 'none')" />
-					<th th:replace="fragments :: column_linkk('days', 'Days', 'none')" />
-					<th th:replace="fragments :: column_linkk('codSupported', 'COD Supported', 'none')" />
+					<th th:replace="fragments :: column_linkk('/shipping_rates' , 'id', 'ID', 'none')" />
+					<th th:replace="fragments :: column_linkk('/shipping_rates' , 'country', 'Country', 'none')" />
+					<th th:replace="fragments :: column_linkk('/shipping_rates' , 'state', 'State', 'none')" />
+					<th th:replace="fragments :: column_linkk('/shipping_rates' , 'rate', 'Rate', 'none')" />
+					<th th:replace="fragments :: column_linkk('/shipping_rates' , 'days', 'Days', 'none')" />
+					<th th:replace="fragments :: column_linkk('/shipping_rates' , 'codSupported', 'COD Supported', 'none')" />
 					
 					<th></th>
 				</tr>								
@@ -46,27 +46,7 @@
 		</table>
 	</div>
 	
-	<div class="less-details">
-		<div th:each="rate : ${shippingRates}" class="row m-1">
-			<div class="col-4">
-				<span><b>[[${rate.country.name}]]</b></span>
-				<br/>
-				<span>[[${rate.state}]]</span>
-			</div>
-			<div class="col-8">
-				<div>
-					<div th:replace="shipping_rates/shipping_rates_fragment :: cod_support" />
-					&nbsp; 
-					<div th:replace="fragments :: editt('shipping rate', '/shipping_rates/edit/' + ${rate.id})" />
-					&nbsp; 
-					<div th:replace="fragments :: deletee('shipping rate', ${rate.id}, '/shipping_rates/delete/' + ${rate.id}, true)" />
-				</div>
-			</div>
-			<div>&nbsp;</div>
-		</div>	
-	</div>		
-	
-	<div th:replace="fragments :: pagination('shipping rates')"></div>
+	<div th:replace="fragments :: pagination('/shipping_rates', 'shipping_rates')"></div>
 	<div th:replace="modal_fragments :: confirm_modal" />
 	<div th:replace="fragments :: footer"></div>
 	

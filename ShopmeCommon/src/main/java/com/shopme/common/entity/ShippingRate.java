@@ -8,6 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "shipping_rates")
 public class ShippingRate {
 
     @Id
@@ -23,4 +24,7 @@ public class ShippingRate {
     private Country country;
 
     private String state;
+
+    @Column(name = "cod_supported")
+    private boolean codSupported;
 }

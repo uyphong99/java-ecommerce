@@ -11,6 +11,5 @@ public interface ShippingRateRepository extends JpaRepository<ShippingRate, Inte
         PagingAndSortingRepository<ShippingRate, Integer> {
 
     @Query("SELECT r FROM ShippingRate r WHERE CONCAT(r.country.name, r.state) LIKE %?1%")
-    Page<ShippingRate> findAllRates(String keyword, Pageable pageable);
-
+    Page<ShippingRate> search(String keyword, Pageable pageable);
 }
