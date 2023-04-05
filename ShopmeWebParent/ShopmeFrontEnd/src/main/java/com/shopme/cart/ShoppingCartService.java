@@ -48,4 +48,10 @@ public class ShoppingCartService {
 
         return items;
     }
+
+    public void deleteProductInCustomerCart(Customer customer, Product product) {
+        CartItem item = findByCustomerAndProduct(customer, product);
+
+        cartRepository.delete(item);
+    }
 }
