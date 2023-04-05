@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShoppingRate {
+public class ShippingRate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
