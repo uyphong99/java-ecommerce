@@ -7,6 +7,7 @@ import com.shopme.customer.CustomerService;
 import com.shopme.product.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,5 +55,18 @@ public class ShoppingCartRestController {
         Float subtotal = item.getSubtotal();
 
         return String.valueOf(subtotal);
+    }
+
+    @DeleteMapping("cart/remove/{productId}")
+    public String deleteCartItem(@PathVariable("productId") Integer productId,
+                                 Authentication authentication) {
+
+        String customerEmail = utility.getUserEmail(authentication);
+        Customer customer = customerService.findByEmail(customerEmail);
+        Product product = productService.findById(productId);
+
+        cartService.deleteProductInCustomerCart(customer, product);
+
+        return "Product " + productId + " has been deleted from your cart!";
     }
 }
