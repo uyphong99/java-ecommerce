@@ -5,6 +5,9 @@ import com.shopme.common.entity.Customer;
 import com.shopme.common.entity.Product;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class ShoppingCartService {
@@ -12,6 +15,7 @@ public class ShoppingCartService {
     private ShoppingCartRepository cartRepository;
 
     public CartItem save(CartItem cartItem) {
+
         return cartRepository.save(cartItem);
     }
 
@@ -37,5 +41,11 @@ public class ShoppingCartService {
         }
 
         return cartRepository.save(cartItem);
+    }
+
+    public List<CartItem> findItemsByCustomer(Customer customer) {
+        List<CartItem> items = cartRepository.findAllByCustomer(customer);
+
+        return items;
     }
 }
