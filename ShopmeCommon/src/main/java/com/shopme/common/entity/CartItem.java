@@ -26,5 +26,8 @@ public class CartItem {
 
     private Integer quantity;
 
+    public float getSubtotal() {
+        return product.getDiscountPrice() * quantity;
+    }
 
 }

@@ -17,11 +17,14 @@ $(document).ready(function() {
 		productId = $(this).attr("pid");
 		quantityInput = $("#quantity" + productId);
 		newQuantity = parseInt(quantityInput.val()) + 1;
-		
+
+		quantityInput.val(newQuantity);
+		/*
 		if (newQuantity <= 5) {
-			quantityInput.val(newQuantity);
+
 		} else {
 			showWarningModal('Maximum quantity is 5');
 		}
+		*/
 	});	
 });

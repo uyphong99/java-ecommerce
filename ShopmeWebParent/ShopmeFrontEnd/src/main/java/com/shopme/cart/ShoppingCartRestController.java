@@ -5,12 +5,12 @@ import com.shopme.common.entity.Customer;
 import com.shopme.common.entity.Product;
 import com.shopme.customer.CustomerService;
 import com.shopme.product.ProductService;
-import com.shopme.security.CustomerUserDetails;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.shopme.Utility;
 @AllArgsConstructor
 @RestController
 public class ShoppingCartRestController {
@@ -21,18 +21,38 @@ public class ShoppingCartRestController {
 
     private CustomerService customerService;
 
+    private Utility utility;
+
     @PostMapping("/cart/add/{productId}/{quantity}")
     public String addProductToCart(@PathVariable("productId") Integer productId,
                                    @PathVariable("quantity") Integer quantity,
                                    Authentication authentication) {
-        Product product = productService.findById(productId);
-        CustomerUserDetails customerUserDetails = (CustomerUserDetails) authentication.getPrincipal();
 
-        String customerEmail = customerUserDetails.getUsername();
+        Product product = productService.findById(productId);
+        String customerEmail = utility.getUserEmail(authentication);
+
         Customer customer = customerService.findByEmail(customerEmail);
 
-        CartItem cart = cartService.updateCart(customer, product, quantity);
+        cartService.updateCart(customer, product, quantity);
 
         return quantity + " item(s) were added to cart! ";
+    }
+
+    @PostMapping("/cart/update/{productId}/{quantity}")
+    public String updateProductQuantity(@PathVariable("productId") Integer productId,
+                                      @PathVariable("quantity") Integer quantity,
+                                      Authentication authentication) {
+        String customerEmail = utility.getUserEmail(authentication);
+        Customer customer = customerService.findByEmail(customerEmail);
+        Product product = productService.findById(productId);
+
+        CartItem item = cartService.findByCustomerAndProduct(customer, product);
+        item.setQuantity(quantity);
+
+        cartService.save(item);
+
+        Float subtotal = item.getSubtotal();
+
+        return String.valueOf(subtotal);
     }
 }

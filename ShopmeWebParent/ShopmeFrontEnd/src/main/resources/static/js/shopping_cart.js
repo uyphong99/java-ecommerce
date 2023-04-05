@@ -35,13 +35,18 @@ function increaseQuantity(link) {
 		productId = link.attr("pid");
 		quantityInput = $("#quantity" + productId);
 		newQuantity = parseInt(quantityInput.val()) + 1;
-		
+
+		quantityInput.val(newQuantity);
+		updateQuantity(productId, newQuantity);
+
+		/*
 		if (newQuantity <= 5) {
-			quantityInput.val(newQuantity);
-			updateQuantity(productId, newQuantity);
+
 		} else {
 			showWarningModal('Maximum quantity is 5');
-		}	
+		}
+
+		 */
 }
 
 function updateQuantity(productId, quantity) {
