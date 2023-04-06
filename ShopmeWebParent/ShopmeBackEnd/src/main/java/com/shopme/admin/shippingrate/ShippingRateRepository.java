@@ -1,5 +1,6 @@
 package com.shopme.admin.shippingrate;
 
+import com.shopme.common.entity.Country;
 import com.shopme.common.entity.ShippingRate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,6 @@ public interface ShippingRateRepository extends JpaRepository<ShippingRate, Inte
 
     @Query("SELECT r FROM ShippingRate r WHERE CONCAT(r.country.name, r.state) LIKE %?1%")
     Page<ShippingRate> search(String keyword, Pageable pageable);
+
+    Boolean existsByCountryAndState(Country country, String state);
 }

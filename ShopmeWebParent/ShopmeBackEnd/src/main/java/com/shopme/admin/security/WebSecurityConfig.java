@@ -28,7 +28,7 @@ public class WebSecurityConfig {
 				authorize.requestMatchers("/brands/**").hasAnyAuthority("Admin", "Editor");
 				authorize.requestMatchers("/products/**").hasAnyAuthority("Admin", "Editor", "Salesperson", "Shipper");
 				authorize.requestMatchers("/customers/**").hasAnyAuthority("Admin", "Salesperson");
-				authorize.requestMatchers("/shipping/**").hasAnyAuthority("Admin", "Salesperson");
+				authorize.requestMatchers("/shipping_rates/**").hasAnyAuthority("Admin", "Salesperson");
 				authorize.requestMatchers("/orders/**").hasAnyAuthority("Admin", "Salesperson", "Shipper");
 				authorize.requestMatchers("/reports/**").hasAnyAuthority("Admin", "Salesperson");
 				authorize.requestMatchers("/articles/**").hasAnyAuthority("Admin", "Editor");

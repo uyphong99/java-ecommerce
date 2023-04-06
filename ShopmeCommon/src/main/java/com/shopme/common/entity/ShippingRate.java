@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,4 +28,19 @@ public class ShippingRate {
 
     @Column(name = "cod_supported")
     private boolean codSupported;
+
+
+    public Boolean isTheSameWith(ShippingRate rate) {
+        String otherCountryName = rate.country.getName();
+        String thisCountryName = this.country.getName();
+
+        String otherState = rate.getState();
+        String thisState = this.getState();
+
+        if (otherCountryName.equals(thisCountryName) && otherState.equals(thisState)) {
+            return true;
+        }
+
+        return false;
+    }
 }
