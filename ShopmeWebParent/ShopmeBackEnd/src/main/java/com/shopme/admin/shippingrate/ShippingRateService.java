@@ -1,5 +1,6 @@
 package com.shopme.admin.shippingrate;
 
+import com.shopme.common.entity.Country;
 import com.shopme.common.entity.ShippingRate;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +30,41 @@ public class ShippingRateService {
         }
 
         return shippingRateRepository.search(keyword, pageable);
+    }
+
+    public ShippingRate findById(Integer id) {
+        return shippingRateRepository.findById(id).get();
+    }
+
+    public ShippingRate save(ShippingRate rate) {
+        return shippingRateRepository.save(rate);
+    }
+
+    public Boolean existsByCountryAndState(ShippingRate rate) {
+        Country country = rate.getCountry();
+        String state = rate.getState();
+        return shippingRateRepository.existsByCountryAndState(country, state);
+    }
+
+    public boolean isUnique(ShippingRate shippingRate) {
+        Integer id = shippingRate.getId();
+        ShippingRate oldRate = findById(id);
+        if (shippingRate == null) {
+            if (existsByCountryAndState(shippingRate)) {
+                return false;
+            }
+        } else {
+            if (!oldRate.isTheSameWith(shippingRate)) {
+                if (existsByCountryAndState(shippingRate)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public void delete(ShippingRate rate) {
+        shippingRateRepository.delete(rate);
     }
 }
