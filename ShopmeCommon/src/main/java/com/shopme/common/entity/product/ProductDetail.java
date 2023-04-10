@@ -1,6 +1,4 @@
-package com.shopme.common.entity;
-
-import java.util.Set;
+package com.shopme.common.entity.product;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

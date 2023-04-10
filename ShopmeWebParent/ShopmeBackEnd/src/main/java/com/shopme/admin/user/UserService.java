@@ -1,6 +1,7 @@
 package com.shopme.admin.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -75,19 +76,38 @@ public class UserService {
 	
 	/*
 	 * This method will handle the post request of form's onSubmit
-	 * */
+	 *
 	public boolean isDuplicatedEmail(Integer id ,String email) {
 		User user = userRepo.findUserByEmail(email);
 		
-		if (userRepo.existsByEmail(email)) {
-			if (id != null) {
-				if (id != user.getId()) return true;
+		if (user != null && userRepo.existsByEmail(email)) {
+			if (id != null && id != user.getId()) {
+				return true;
 			} else if (id == null) {
 				return true;
 			}
 		}
 		
 		return false;		
+	}  */
+
+	public boolean isDuplicatedEmail(Integer userId, String email) {
+
+		if (userId == null) {
+			return userRepo.existsByEmail(email);
+		}
+
+		Optional<User> optionalUser = userRepo.findById(userId);
+		if (userId == null || optionalUser.isEmpty()) {
+			return userRepo.existsByEmail(email);
+		} else {
+			User user = optionalUser.get();
+			if (user.getEmail().equals(email)) {
+				return false;
+			} else {
+				return userRepo.existsByEmail(email);
+			}
+		}
 	}
 	
 	public User getUserById(Integer id) {

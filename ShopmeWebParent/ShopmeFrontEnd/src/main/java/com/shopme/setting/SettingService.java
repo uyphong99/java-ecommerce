@@ -23,4 +23,9 @@ public class SettingService {
 	public String findValueByKey(String key) {
 		return repository.findValueByKey(key);
 	}
+
+	public List<Setting> findAllByCategoryIn(SettingCategory... category) {
+		return repository.findByCategoryIn(category);
+	}
+
 }

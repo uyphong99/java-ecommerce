@@ -1,7 +1,6 @@
 package com.shopme.product;
 
 
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
@@ -10,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.shopme.common.entity.Category;
-import com.shopme.common.entity.Product;
+import com.shopme.common.entity.product.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 	

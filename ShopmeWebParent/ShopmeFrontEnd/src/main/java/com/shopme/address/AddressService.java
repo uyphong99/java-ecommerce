@@ -39,4 +39,25 @@ public class AddressService {
     public void delete(Address address) {
         addressRepository.delete(address);
     }
+
+    public Address findCustomerDefaultAddress(Customer customer) {
+        Address defaultAddress = addressRepository.findByCustomerAndDefaultAddress(customer, true);
+
+        if (defaultAddress == null) {
+            defaultAddress = Address.builder()
+                    .country(customer.getCountry())
+                    .state(customer.getState())
+                    .addressLine1(customer.getAddressLine1())
+                    .addressLine2(customer.getAddressLine2())
+                    .city(customer.getCity())
+                    .firstName(customer.getFirstName())
+                    .lastName(customer.getLastName())
+                    .postalCode(customer.getPostalCode())
+                    .phoneNumber(customer.getPhoneNumber())
+                    .city(customer.getCity())
+                    .build();
+        }
+
+        return defaultAddress;
+    }
 }

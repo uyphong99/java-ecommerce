@@ -37,6 +37,11 @@ public class BrandService {
 	}
 	
 	public boolean checkUnique(String name, Integer id) {
+
+		if (id == null) {
+			return !brandRepository.existsByName(name);
+		}
+
 		Brand existBrand = findById(id);
 		String oldName = existBrand.getName();
 		

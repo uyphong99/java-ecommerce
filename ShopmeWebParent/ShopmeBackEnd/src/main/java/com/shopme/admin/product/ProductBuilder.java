@@ -1,11 +1,10 @@
 package com.shopme.admin.product;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.shopme.common.entity.Brand;
 import com.shopme.common.entity.Category;
-import com.shopme.common.entity.Product;
+import com.shopme.common.entity.product.Product;
 
 
 public class ProductBuilder {

@@ -1,4 +1,4 @@
-package com.shopme.common.entity;
+package com.shopme.common.entity.product;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 
-
+import com.shopme.common.entity.Brand;
+import com.shopme.common.entity.Category;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
