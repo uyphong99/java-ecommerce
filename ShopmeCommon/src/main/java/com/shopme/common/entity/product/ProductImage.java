@@ -1,4 +1,4 @@
-package com.shopme.common.entity;
+package com.shopme.common.entity.product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

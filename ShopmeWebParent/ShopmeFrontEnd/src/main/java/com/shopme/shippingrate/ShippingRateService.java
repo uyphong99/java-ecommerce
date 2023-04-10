@@ -1,6 +1,8 @@
-package com.shopme.admin.shippingrate;
+package com.shopme.shippingrate;
 
+import com.shopme.common.entity.Address;
 import com.shopme.common.entity.Country;
+import com.shopme.common.entity.Customer;
 import com.shopme.common.entity.ShippingRate;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.Callable;
 
 @Service
 @AllArgsConstructor
@@ -72,5 +76,21 @@ public class ShippingRateService {
 
     public void delete(ShippingRate rate) {
         shippingRateRepository.delete(rate);
+    }
+
+    public boolean existsByAddress(Address address) {
+        Country country = address.getCountry();
+        String state = address.getState();
+
+        return shippingRateRepository.existsByCountryAndState(country, state);
+    }
+
+    public ShippingRate findByCountryAndState(Customer customer) {
+        Country country = customer.getCountry();
+        String state = customer.getState();
+
+        ShippingRate rate = shippingRateRepository.findByCountryAndState(country, state);
+
+        return rate;
     }
 }

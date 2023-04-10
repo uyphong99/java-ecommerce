@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.shopme.common.entity.Category;
-import com.shopme.common.entity.Product;
+import com.shopme.common.entity.product.Product;
 
 @Service
 public class ProductService {

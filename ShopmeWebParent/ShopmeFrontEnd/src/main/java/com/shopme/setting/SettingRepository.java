@@ -21,4 +21,6 @@ public interface SettingRepository extends JpaRepository<Setting, Integer> {
 	public String findValueByKey(String key);
 
 	public Set<Setting> findAllByCategoryContains(SettingCategory... categories);
+
+	List<Setting> findByCategoryIn(SettingCategory... categories);
 }

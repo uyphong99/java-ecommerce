@@ -1,5 +1,6 @@
 package com.shopme.common.entity;
 
+import com.shopme.common.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,5 +30,8 @@ public class CartItem {
     public float getSubtotal() {
         return product.getDiscountPrice() * quantity;
     }
+
+    @Transient
+    private float shippingCost;
 
 }

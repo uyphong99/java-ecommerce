@@ -37,6 +37,11 @@ public class CategoryService {
 	}
 	
 	public boolean checkUniqueCategory(Integer id, String name, String alias) {
+
+		if (id == null) {
+			return !repository.existsCategoryByName(name) &&
+					!repository.existsCategoryByAlias(alias);
+		}
 		
 		Category category = findById(id);
 		String oldName = category.getName();
