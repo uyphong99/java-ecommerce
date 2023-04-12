@@ -1,11 +1,14 @@
 package com.shopme.common.entity.order;
 
+import com.shopme.common.entity.CartItem;
 import com.shopme.common.entity.Customer;
+import com.shopme.common.entity.ShippingRate;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -74,6 +77,7 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     private Set<OrderDetail> orderDetails = new HashSet<>();
+
 
     public void copyAddressFromCustomer() {
         setFirstName(customer.getFirstName());
