@@ -30,6 +30,7 @@ public class CheckoutService {
                 .codSupported(shippingRate.isCodSupported())
                 .productCost(productsCost)
                 .productTotal(totalPrice)
+                .shippingCostTotal(totalShippingCost)
                 .build();
 
         return info;
@@ -46,7 +47,7 @@ public class CheckoutService {
             float h = product.getHeight();
             float l = product.getLength();
 
-            float dimWeight = w * h * l / DIM_DIVISOR;
+            float dimWeight = (w * h * l); // DIM_DIVISOR;
 
             float weight = Math.max(product.getWeight(), dimWeight);
 

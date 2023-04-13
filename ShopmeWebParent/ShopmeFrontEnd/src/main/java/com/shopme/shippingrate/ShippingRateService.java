@@ -93,4 +93,13 @@ public class ShippingRateService {
 
         return rate;
     }
+
+    public ShippingRate findByAddress(Address address) {
+        Country country = address.getCountry();
+        String state = address.getState();
+
+        ShippingRate rate = shippingRateRepository.findByCountryAndState(country, state);
+
+        return rate;
+    }
 }

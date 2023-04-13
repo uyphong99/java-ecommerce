@@ -5,6 +5,7 @@ import com.shopme.common.entity.Customer;
 import com.shopme.common.entity.product.Product;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -53,5 +54,10 @@ public class ShoppingCartService {
         CartItem item = findByCustomerAndProduct(customer, product);
 
         cartRepository.delete(item);
+    }
+
+    @Transactional
+    public void emptyTheCart(Customer customer) {
+        cartRepository.deleteByCustomer(customer);
     }
 }
