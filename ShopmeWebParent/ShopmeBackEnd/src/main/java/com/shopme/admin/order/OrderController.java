@@ -4,6 +4,7 @@ import com.shopme.admin.setting.SettingService;
 import com.shopme.common.entity.Setting;
 import com.shopme.common.entity.SettingCategory;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.Banner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -85,5 +86,14 @@ public class OrderController {
         return "redirect:/orders";
     }
 
+    @GetMapping("/orders/edit/{orderId}")
+    public String getOrderEditForm(@PathVariable("orderId") Integer orderId,
+                                   Model model) {
 
+        Order order = orderService.findById(orderId);
+
+        model.addAttribute("order", order);
+
+        return "orders/order_form";
+    }
 }

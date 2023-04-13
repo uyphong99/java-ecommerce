@@ -107,7 +107,7 @@ public class CheckoutController {
 
         Customer customer = customerService.findByVerificationCode(verifyCode);
         Order order = orderService.transformCartToOrder(customer);
-        orderService.save(order);
+        //orderService.save(order);
         shoppingCartService.emptyTheCart(customer);
 
         return "redirect:/";

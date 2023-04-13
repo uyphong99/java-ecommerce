@@ -6,7 +6,11 @@ import com.shopme.common.entity.ShippingRate;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,6 +82,10 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private Set<OrderDetail> orderDetails = new HashSet<>();
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("updatedTime ASC")
+    private List<OrderTrack> orderTracks = new ArrayList<>();
+
 
     public void copyAddressFromCustomer() {
         setFirstName(customer.getFirstName());
@@ -98,5 +106,17 @@ public class Order {
         destination += country;
 
         return destination;
+    }
+
+    @Transient
+    public String getUpdatedTimeOnForm() {
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+        return dateFormatter.format(this.deliverDate);
+    }
+
+    public void setUpdatedTimeOnForm(String dateString) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss");
+
+        this.deliverDate = LocalDateTime.parse(dateString, dateFormatter);;
     }
 }

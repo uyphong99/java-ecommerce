@@ -7,10 +7,7 @@ import com.shopme.common.entity.Address;
 import com.shopme.common.entity.CartItem;
 import com.shopme.common.entity.Customer;
 import com.shopme.common.entity.ShippingRate;
-import com.shopme.common.entity.order.Order;
-import com.shopme.common.entity.order.OrderDetail;
-import com.shopme.common.entity.order.OrderStatus;
-import com.shopme.common.entity.order.PaymentMethod;
+import com.shopme.common.entity.order.*;
 import com.shopme.shippingrate.ShippingRateService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +30,8 @@ public class OrderService {
     private ShoppingCartService shoppingCartService;
     private AddressService addressService;
     private ShippingRateService shippingRateService;
+    private OrderDetailsService orderDetailsService;
+    private OrderTrackService orderTrackService;
     public static final Integer ORDER_PER_PAGE = 10;
 
     public List<Order> findAll() {
@@ -61,14 +61,16 @@ public class OrderService {
     }
 
     public OrderDetail mapItemToOrderDetail(CartItem item) {
-        return OrderDetail.builder()
+        OrderDetail orderDetail = OrderDetail.builder()
                 .quantity(item.getQuantity())
                 .shippingCost(item.getShippingCost())
                 .subtotal(item.getSubtotal())
                 .unitPrice(item.getProduct().getPrice())
                 .product(item.getProduct())
+                .productCost(item.getProduct().getCost())
                 .build();
 
+        return orderDetailsService.save(orderDetail);
     }
 
     public Set<OrderDetail> mapCartToOrderDetails(List<CartItem> items) {
@@ -82,7 +84,7 @@ public class OrderService {
         ShippingRate rate = shippingRateService.findByAddress(address);
         List<CartItem> items = shoppingCartService.findItemsByCustomer(customer);
 
-        return Order.builder()
+        Order order = Order.builder()
                 .addressLine1(address.getAddressLine1())
                 .addressLine2(address.getAddressLine2())
                 .orderDetails(mapCartToOrderDetails(items))
@@ -104,8 +106,25 @@ public class OrderService {
                 .status(OrderStatus.NEW)
                 .paymentMethod(PaymentMethod.COD)
                 .customer(customer)
+                .orderTracks(new ArrayList<>())
                 .build();
+
+        Order savedOrder = save(order);
+
+        OrderTrack orderTrack = OrderTrack.builder()
+                .updatedTime(LocalDateTime.now())
+                .order(order)
+                .notes("Order was created")
+                .status(OrderStatus.NEW)
+                .build();
+
+        OrderTrack savedOrderTrack = orderTrackService.save(orderTrack);
+
+        savedOrder.getOrderTracks().add(savedOrderTrack);
+
+        return order;
     }
+
 
     public Order save(Order order) {
         return orderRepository.save(order);
