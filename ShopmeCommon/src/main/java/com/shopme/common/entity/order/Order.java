@@ -5,6 +5,7 @@ import com.shopme.common.entity.Customer;
 import com.shopme.common.entity.ShippingRate;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -31,6 +32,7 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    //@DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
     @Column(name = "order_time")
     private LocalDateTime orderTime;
 
@@ -75,11 +77,11 @@ public class Order {
 
     @Column(name = "deliver_days")
     private Integer deliverDays;
-
+    //@DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
     @Column(name = "deliver_date")
     private LocalDateTime deliverDate;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderDetail> orderDetails = new HashSet<>();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -117,6 +119,66 @@ public class Order {
     public void setUpdatedTimeOnForm(String dateString) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss");
 
-        this.deliverDate = LocalDateTime.parse(dateString, dateFormatter);;
+        this.deliverDate = LocalDateTime.parse(dateString, dateFormatter);
+    }
+
+    @Transient
+    public String getProductNames() {
+        String productNames = "";
+
+        productNames = "<ul>";
+
+        for (OrderDetail detail : orderDetails) {
+            productNames += "<li>" + detail.getProduct().getShortName() + "</li>";
+        }
+
+        productNames += "</ul>";
+
+        return productNames;
+    }
+
+    @Transient
+    public boolean isCOD() {
+        return paymentMethod.equals(PaymentMethod.COD);
+    }
+
+    @Transient
+    public boolean isProcessing() {
+        return hasStatus(OrderStatus.PROCESSING);
+    }
+
+    @Transient
+    public boolean isPicked() {
+        return hasStatus(OrderStatus.PICKED);
+    }
+
+    @Transient
+    public boolean isShipping() {
+        return hasStatus(OrderStatus.SHIPPING);
+    }
+
+    @Transient
+    public boolean isDelivered() {
+        return hasStatus(OrderStatus.DELIVERED);
+    }
+
+    @Transient
+    public boolean isReturnRequested() {
+        return hasStatus(OrderStatus.RETURN_REQUESTED);
+    }
+
+    @Transient
+    public boolean isReturned() {
+        return hasStatus(OrderStatus.RETURNED);
+    }
+
+    public boolean hasStatus(OrderStatus status) {
+        for (OrderTrack aTrack : orderTracks) {
+            if (aTrack.getStatus().equals(status)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

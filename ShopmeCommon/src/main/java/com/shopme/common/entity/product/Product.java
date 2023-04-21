@@ -105,8 +105,11 @@ public class Product {
 	}
 	
 	public Product() {}
-	
-	public String getMainImage() {
+
+    public Product(int id) {
+    }
+
+    public String getMainImage() {
 		return mainImage;
 	}
 

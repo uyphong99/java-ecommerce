@@ -36,7 +36,7 @@ public class OrderTrack  {
 	
 	@Transient
 	public String getUpdatedTimeOnForm() {
-		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ss");
 		return dateFormatter.format(this.updatedTime);
 	}
 	

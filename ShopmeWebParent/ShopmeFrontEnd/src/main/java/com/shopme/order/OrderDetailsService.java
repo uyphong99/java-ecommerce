@@ -12,4 +12,8 @@ public class OrderDetailsService {
     public OrderDetail save(OrderDetail orderDetail) {
         return orderDetailsRepository.save(orderDetail);
     }
+
+    public void saveAll(Iterable<OrderDetail> orderDetails) {
+        orderDetailsRepository.saveAll(orderDetails);
+    }
 }

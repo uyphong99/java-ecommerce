@@ -90,13 +90,7 @@ public class CustomerController {
     public String viewCustomerDetail(Authentication authentication, Model model) {
         String email = utility.getUserEmail(authentication);
 
-        System.out.println("Test email: " + email);
-
         Customer customer = service.findByEmail(email);
-
-        System.out.println("Test API: " + customer);
-
-
 
         List<Country> listCountries = countryService.findAll();
 

@@ -24,7 +24,7 @@
 				    <label class="col-form-label">Time:</label>
 				    <div class="col">
 				    	
-						<input type="datetime-local" name="trackDate" th:value="${track.updatedTimeOnForm}"
+						<input type="datetime-local" name="trackDate" th:value="${track.getUpdatedTimeOnForm()}"
 							class="form-control" 
 							th:readonly="${isTrackWithStatusNew}"
 							th:required="${!isTrackWithStatusNew}"
