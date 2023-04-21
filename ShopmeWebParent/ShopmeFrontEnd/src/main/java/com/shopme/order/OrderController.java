@@ -74,4 +74,14 @@ public class OrderController {
             model.addAttribute( setting.getKey(), setting.getValue() );
         }
     }
+
+    @GetMapping("/orders/detail/{id}")
+    public String getOrderDetail(Model model, @PathVariable("id") Integer orderId) {
+
+        Order order = orderService.findById(orderId);
+
+        model.addAttribute("order", order);
+
+        return "orders/order_details_modal";
+    }
 }
