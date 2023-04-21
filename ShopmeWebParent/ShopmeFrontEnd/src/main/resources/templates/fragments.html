@@ -25,6 +25,17 @@
 <div class="text-center m-1" th:unless="${totalItems > 0}">
 	<span>No [[${entityName}]] found</span>
 </div>
+
+	<th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+		<a class="text-white"
+		   th:href="@{${moduleURL} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName}  +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">
+			[[${columnLabel}]]
+		</a>
+		<span th:if="${sortField == fieldName}"
+			  th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}" ></span>
+	</th>
+
+
 	<div th:fragment="modal_dialog" class="modal fade text-center" id="modalDialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -70,6 +81,11 @@
 	</nav>	
 </div>
 </div>
+
+<div th:fragment="format_time(dateTime)" th:remove="tag">
+	<span th:text="${#temporals.format(dateTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+</div>
+
 <div th:fragment="confirm_modal" class="modal fade text-center" id="confirmModal">
 	<div class="modal-dialog">
 		<div class="modal-content">

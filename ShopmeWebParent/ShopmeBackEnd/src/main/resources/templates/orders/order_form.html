@@ -9,8 +9,10 @@
 		<h2>Manage Orders | [[${pageTitle}]]</h2>
 	</div>
 		
-	<form th:action="@{/order/save}" th:object="${order}" method="post" onsubmit="return processFormBeforeSubmit();">
+	<form th:action="@{/orders/save}" th:object="${order}" method="post">
 	<input type="hidden" th:field="*{id}" />
+		<input type="hidden" th:field="*{customer}" />
+		<input type="hidden" th:field="*{orderTime}" />
 	<div>
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
 		  <li class="nav-item">

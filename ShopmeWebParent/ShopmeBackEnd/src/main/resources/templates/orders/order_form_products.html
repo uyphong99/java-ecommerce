@@ -4,7 +4,7 @@
 <div th:fragment="content" th:remove="tag">				
 	<div id="productList">
 		
-		<th:block th:each="detail, status : ${order.orderDetails}">
+		<th:block th:each="detail, status : ${order.getOrderDetails()}">
 		<div class="border rounded p-1" th:with="product = ${detail.product}" th:id="'row' + ${status.count}">
 			<input type="hidden" name="detailId" th:value="${detail.id}" />
 			<input type="hidden" name="productId" th:value="${product.id}" class="hiddenProductId" />
@@ -15,7 +15,7 @@
 					<div><a class="fas fa-trash icon-dark linkRemove" href="" th:rowNumber="${status.count}"></a></div>			
 				</div>
 				<div class="col-3">
-					<img th:src="@{${product.mainImagePath}}" class="img-fluid" />
+					<img th:src="@{${product.getMainImagePath}}" class="img-fluid" />
 				</div>
 			</div>
 			
